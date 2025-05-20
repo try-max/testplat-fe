@@ -31,6 +31,10 @@ export interface UserState {
   userInfo: { name: string };
 }
 
+export interface UserMessage {
+  userName: string;
+}
+
 /* tabsMenuProps */
 export interface TabsMenuProps {
   icon: string;
