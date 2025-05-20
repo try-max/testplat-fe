@@ -6,7 +6,10 @@ export interface Result {
 
 // 请求响应参数（包含data）
 export interface ResultData<T = any> extends Result {
+  [x: string]: any;
+  success: any;
   data: T;
+  username: string;
 }
 
 // 分页响应参数
@@ -34,10 +37,11 @@ export namespace Upload {
 export namespace Login {
   export interface ReqLoginForm {
     username: string;
-    password: string;
+    pwd: string;
   }
   export interface ResLogin {
     access_token: string;
+    username: string;
   }
   export interface ResAuthButtons {
     [key: string]: string[];
@@ -68,6 +72,49 @@ export namespace User {
     avatar: string;
     photo: any[];
     children?: ResUserList[];
+  }
+
+  export interface ResCaseList {
+    id: string;
+    env: string;
+    module: number;
+    creator: string;
+    created_at: string;
+    modifier: string;
+    updated_at: string;
+    method: "GET" | "POST" | "PUT" | "DELETE";
+    url: number;
+    headers: Record<string, string>;
+    params: Record<string, string>;
+    expected: Record<string, string>;
+    ignored_fields: string;
+    is_deleted: string;
+    skip_execution: string;
+    desc: string;
+    children?: ResUserList[];
+  }
+
+  export interface executeCase {
+    // env: string;
+    // gender: number;
+    // creator: string;
+    // created_at: string;
+    // modifier: string;
+    // updated_at: string;
+    method: "GET" | "POST" | "PUT" | "DELETE";
+    url: number;
+    headers: Record<string, string>;
+    params: Record<string, any>;
+    expected: Record<string, string>;
+    ignored_fields: string;
+    // is_deleted: string;
+    // skip_execution: string;
+    // children?: ResUserList[];
+  }
+
+  //接口用例对比情况
+  export interface CaseRes {
+    success: string;
   }
   export interface ResStatus {
     userLabel: string;
