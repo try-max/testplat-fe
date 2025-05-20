@@ -37,7 +37,7 @@ const options = ref({
   columns: [
     {
       formItem: {
-        label: "用户名",
+        label: "用户名-from",
         prop: "username",
         labelWidth: "80px",
         required: true
