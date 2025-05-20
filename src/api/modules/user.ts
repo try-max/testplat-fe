@@ -6,8 +6,8 @@ import http from "@/api";
  * @name 用户管理模块
  */
 // 获取用户列表
-export const getUserList = (params: User.ReqUserParams) => {
-  return http.post<ResPage<User.ResUserList>>(PORT1 + `/user/list`, params);
+export const getCaseList = (params: User.ResCaseList) => {
+  return http.post<ResPage<User.ResCaseList>>(PORT1 + `/case/getAllCase`, params);
 };
 
 // 获取树形用户列表
@@ -16,8 +16,12 @@ export const getUserTreeList = (params: User.ReqUserParams) => {
 };
 
 // 新增用户
-export const addUser = (params: { id: string }) => {
-  return http.post(PORT1 + `/user/add`, params);
+export const addCase = (params: User.ResCaseList) => {
+  // console.log(localStorage.getItem("user"));
+
+  params.creator = localStorage.getItem("user") + "";
+  // console.log(params.creator);
+  return http.post(PORT1 + `/case/addCase`, params);
 };
 
 // 批量添加用户
@@ -25,9 +29,10 @@ export const BatchAddUser = (params: FormData) => {
   return http.post(PORT1 + `/user/import`, params);
 };
 
-// 编辑用户
-export const editUser = (params: { id: string }) => {
-  return http.post(PORT1 + `/user/edit`, params);
+// 编辑用例
+export const editCase = (params: User.ResCaseList) => {
+  params.modifier = localStorage.getItem("user") + "";
+  return http.post(PORT1 + `/case/caseEdit`, params);
 };
 
 // 删除用户
@@ -36,13 +41,19 @@ export const deleteUser = (params: { id: string[] }) => {
 };
 
 // 切换用户状态
-export const changeUserStatus = (params: { id: string; status: number }) => {
-  return http.post(PORT1 + `/user/change`, params);
+export const changeUserStatus = (params: User.ResCaseList) => {
+  params.modifier = localStorage.getItem("user") + "";
+  return http.post(PORT1 + `/case/changeCaseStatus`, params);
 };
 
 // 重置用户密码
 export const resetUserPassWord = (params: { id: string }) => {
   return http.post(PORT1 + `/user/rest_password`, params);
+};
+
+//执行用例
+export const execute = (params: User.executeCase) => {
+  return http.post<User.CaseRes[]>(PORT1 + `/interfaces/execute`, params);
 };
 
 // 导出用户数据
@@ -69,3 +80,9 @@ export const getUserDepartment = () => {
 export const getUserRole = () => {
   return http.get<User.ResRole[]>(PORT1 + `/user/role`);
 };
+
+// // 获取用户列表
+// export const getCaseList = () => {
+//   return http.get<User.ResCaseList[]>(PORT1 + `/case/get_all_cases`);
+// };
+
