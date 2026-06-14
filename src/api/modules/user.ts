@@ -37,7 +37,7 @@ export const editCase = (params: User.ResCaseList) => {
 
 // 删除用户
 export const deleteUser = (params: { id: string[] }) => {
-  return http.post(PORT1 + `/user/delete`, params);
+  return http.post(PORT1 + `/case/delete`, params);
 };
 
 // 切换用户状态
@@ -85,4 +85,3 @@ export const getUserRole = () => {
 // export const getCaseList = () => {
 //   return http.get<User.ResCaseList[]>(PORT1 + `/case/get_all_cases`);
 // };
-

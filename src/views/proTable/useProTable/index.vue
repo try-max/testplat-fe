@@ -120,10 +120,7 @@ const columns = reactive<ColumnProps<User.ResCaseList>[]>([
     prop: "id",
     label: "用例ID",
     width: 80,
-    search: {
-      el: "select",
-      props: { placeholder: "请输入id查询", filterable: true, remote: true, reserveKeyword: true }
-    }
+    search: { el: "input", props: { filterable: true } }
   },
   { prop: "module", label: "模块", width: 80 },
   { prop: "env", label: "环境", width: 80 },
@@ -131,16 +128,86 @@ const columns = reactive<ColumnProps<User.ResCaseList>[]>([
 
   { prop: "method", label: "请求方式", width: 100 },
   { prop: "url", label: "URL", width: 400 },
+  {
+    prop: "headers",
+    label: "Headers",
+    width: 120,
+    render: scope => {
+      const headers = scope.row.headers;
+      if (!headers || (typeof headers === "object" && Object.keys(headers).length === 0)) {
+        return <el-tag type="info">无</el-tag>;
+      }
+      let displayText: string;
+      if (typeof headers === "string") {
+        try {
+          displayText = JSON.stringify(JSON.parse(headers), null, 2);
+        } catch {
+          displayText = headers;
+        }
+      } else {
+        displayText = JSON.stringify(headers, null, 2);
+      }
+      return (
+        <el-popover placement="bottom" width="300" trigger="click">
+          {{
+            reference: () => (
+              <el-button type="primary" link size="small">
+                查看 Headers
+              </el-button>
+            ),
+            default: () => (
+              <pre style="margin: 0; white-space: pre-wrap; word-break: break-all; font-size: 12px; max-height: 300px; overflow-y: auto;">
+                {displayText}
+              </pre>
+            )
+          }}
+        </el-popover>
+      );
+    }
+  },
+  {
+    prop: "params",
+    label: "Params",
+    width: 120,
+    render: scope => {
+      const params = scope.row.params;
+      if (!params || (typeof params === "object" && Object.keys(params).length === 0)) {
+        return <el-tag type="info">无</el-tag>;
+      }
+      let displayText: string;
+      if (typeof params === "string") {
+        try {
+          displayText = JSON.stringify(JSON.parse(params), null, 2);
+        } catch {
+          displayText = params;
+        }
+      } else {
+        displayText = JSON.stringify(params, null, 2);
+      }
+      return (
+        <el-popover placement="bottom" width="300" trigger="click">
+          {{
+            reference: () => (
+              <el-button type="primary" link size="small">
+                查看 Params
+              </el-button>
+            ),
+            default: () => (
+              <pre style="margin: 0; white-space: pre-wrap; word-break: break-all; font-size: 12px; max-height: 300px; overflow-y: auto;">
+                {displayText}
+              </pre>
+            )
+          }}
+        </el-popover>
+      );
+    }
+  },
   { prop: "expected", label: "expected", width: 400 },
 
-  { prop: "creator", label: "创建人", width: 80 },
-  { prop: "created_at", label: "创建时间", width: 180 },
-  { prop: "modifier", label: "最近一次修改人", width: 130 },
-  { prop: "updated_at", label: "更新时间", width: 180 },
-
   {
-    prop: "is_deleted",
+    prop: "skip_execution",
     label: "用例状态",
+    width: 180,
     search: { el: "tree-select", props: { filterable: true } },
     fieldNames: { label: "userLabel", value: "userStatus" },
     render: scope => {
@@ -155,12 +222,18 @@ const columns = reactive<ColumnProps<User.ResCaseList>[]>([
               onClick={() => changeStatus(scope.row)}
             />
           ) : (
-            <el-tag type={scope.row.is_deleted ? "success" : "danger"}>{scope.row.is_deleted ? "启用" : "禁用"}</el-tag>
+            <el-tag type={scope.row.is_deleted ? "success" : "danger"}>{scope.row.skip_execution ? "启用" : "禁用"}</el-tag>
           )}
         </>
       );
     }
   },
+
+  { prop: "creator", label: "创建人", width: 80 },
+  { prop: "created_at", label: "创建时间", width: 180 },
+  { prop: "modifier", label: "最近一次修改人", width: 130 },
+  { prop: "updated_at", label: "更新时间", width: 180 },
+
   { prop: "operation", label: "操作", fixed: "right", width: 330 }
 ]);
 
@@ -173,7 +246,7 @@ const sortTable = ({ newIndex, oldIndex }: { newIndex?: number; oldIndex?: numbe
 
 // 删除用户信息
 const deleteAccount = async (params: User.ResUserList) => {
-  await useHandleData(deleteUser, { id: [params.id] }, `删除【${params.username}】用户`);
+  await useHandleData(deleteUser, { id: [params.id] }, `删除【${params.id}】用例`);
   proTable.value?.getTableList();
 };
 
