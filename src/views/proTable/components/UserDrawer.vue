@@ -39,6 +39,24 @@
           clearable
         ></el-input>
       </el-form-item>
+      <el-form-item label="Headers" prop="headers">
+        <el-input
+          v-model="drawerProps.row!.headers"
+          placeholder='请输入 Headers (JSON 格式，如 {"Content-Type":"application/json"})'
+          type="textarea"
+          :autosize="{ minRows: 2, maxRows: 10 }"
+          clearable
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="Params" prop="params">
+        <el-input
+          v-model="drawerProps.row!.params"
+          placeholder='请输入 Params (JSON 格式，如 {"key":"value"})'
+          type="textarea"
+          :autosize="{ minRows: 2, maxRows: 10 }"
+          clearable
+        ></el-input>
+      </el-form-item>
       <el-form-item label="预期结果" prop="creator">
         <el-input
           v-model="drawerProps.row!.expected"

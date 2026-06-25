@@ -111,6 +111,22 @@ export namespace User {
     // skip_execution: string;
     // children?: ResUserList[];
   }
+  export interface ReqCookieAdd {
+    cookie: string;
+    module: string;
+    env: string;
+  }
+
+  export interface ResCookie {
+    id: string;
+    cookie: string;
+    module: string;
+    env: string;
+    creator: string;
+    created_at: string;
+    modifier: string;
+    updated_at: string;
+  }
 
   //接口用例对比情况
   export interface CaseRes {

@@ -10,6 +10,7 @@
     >
       <!-- 表格 header 按钮 -->
       <template #tableHeader="scope">
+        <el-button type="primary" :icon="Setting" plain @click="openCookieDialog">Cookie 管理</el-button>
         <el-button v-auth="'add'" type="primary" :icon="CirclePlus" @click="openDrawer('新增')">新增用例</el-button>
         <el-button v-auth="'batchAdd'" type="primary" :icon="Upload" plain @click="batchAdd">批量添加用例</el-button>
         <el-button v-auth="'export'" type="primary" :icon="Download" plain @click="downloadFile">导出用例数据</el-button>
@@ -44,6 +45,7 @@
     </ProTable>
     <UserDrawer ref="drawerRef" />
     <ImportExcel ref="dialogRef" />
+    <CookieDialog ref="cookieDialogRef" />
   </div>
 </template>
 
@@ -58,10 +60,12 @@ import { ElMessage, ElMessageBox } from "element-plus";
 import ProTable from "@/components/ProTable/index.vue";
 import ImportExcel from "@/components/ImportExcel/index.vue";
 import UserDrawer from "@/views/proTable/components/UserDrawer.vue";
+import CookieDialog from "@/views/proTable/components/CookieDialog.vue";
 import { ProTableInstance, ColumnProps } from "@/components/ProTable/interface";
-import { CirclePlus, Delete, EditPen, Download, Upload, View, Refresh } from "@element-plus/icons-vue";
+import { CirclePlus, Delete, EditPen, Download, Upload, View, Refresh, Setting } from "@element-plus/icons-vue";
 import {
   getCaseList,
+  getCookieList,
   deleteUser,
   editCase,
   addCase,
@@ -354,6 +358,7 @@ const downloadFile = async () => {
 
 // 批量添加用户
 const dialogRef = ref<InstanceType<typeof ImportExcel> | null>(null);
+const cookieDialogRef = ref<InstanceType<typeof CookieDialog> | null>(null);
 const batchAdd = () => {
   const params = {
     title: "用户",
@@ -365,6 +370,12 @@ const batchAdd = () => {
 };
 
 // 打开 drawer(新增、查看、编辑)
+// 打开 Cookie 管理弹窗
+const openCookieDialog = () => {
+  getCookieList().then((res: any) => {
+    cookieDialogRef.value?.acceptParams(res || []);
+  });
+};
 const drawerRef = ref<InstanceType<typeof UserDrawer> | null>(null);
 const openDrawer = (title: string, row: Partial<User.ResCaseList> = {}) => {
   const params = {

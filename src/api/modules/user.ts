@@ -51,6 +51,28 @@ export const resetUserPassWord = (params: { id: string }) => {
   return http.post(PORT1 + `/user/rest_password`, params);
 };
 
+// ---------- Cookie 管理 ----------
+// 获取 cookie 列表
+export const getCookieList = () => {
+  return http.post<User.ResCookie[]>(PORT1 + `/cookie/list`);
+};
+
+// 添加 cookie
+export const addCookie = (params: User.ReqCookieAdd) => {
+  return http.post(PORT1 + `/cookie/add`, { ...params, creator: localStorage.getItem("user") + "" });
+};
+
+// 删除 cookie
+export const deleteCookieApi = (params: { id: string }) => {
+  return http.post(PORT1 + `/cookie/delete`, params);
+};
+
+// 批量保存 cookie
+export const batchSaveCookie = (params: User.ResCookie[]) => {
+  return http.post(PORT1 + `/cookie/saveAll`, params);
+};
+// --------------------------------
+
 //执行用例
 export const execute = (params: User.executeCase) => {
   return http.post<User.CaseRes[]>(PORT1 + `/interfaces/execute`, params);
